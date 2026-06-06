@@ -44,6 +44,10 @@ font_main = font.Font(None, 36)
 paddle_l = transform.scale(image.load('paddle.png').convert_alpha(),(20,100))
 paddle_r = transform.scale(image.load('paddle.png').convert_alpha(),(20,100))
 # --- ЗВУКИ ---
+mixer.init()
+mixer.music.load("bg_m.mp3")
+
+hit_sound = mixer.Sound("hit.ogg")
 
 # --- ГРА ---
 game_over = False
@@ -51,6 +55,7 @@ winner = None
 you_winner = None
 my_id, game_state, buffer, client = connect_to_server()
 Thread(target=receive, daemon=True).start()
+mixer.music.play()
 while True:
     for e in event.get():
         if e.type == QUIT:
@@ -102,10 +107,10 @@ while True:
         if game_state['sound_event']:
             if game_state['sound_event'] == 'wall_hit':
                 # звук відбиття м'ячика від стін
-                pass
+                hit_sound.play()
             if game_state['sound_event'] == 'platform_hit':
                 # звук відбиття м'ячика від платформи
-                pass
+                hit_sound.play()
 
     else:
         wating_text = font_main.render(f"Очікування гравців...", True, (255, 255, 255))
